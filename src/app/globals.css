@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: 60 56% 91%; /* Light Beige #F5F5DC */
+    --foreground: 40 30% 20%; /* Dark Brown #4D4036 */
+    --card: 60 60% 95%; /* Slightly lighter beige for cards #F7F7EF */
+    --card-foreground: 40 30% 20%; /* Dark Brown #4D4036 */
+    --popover: 60 60% 95%; /* Slightly lighter beige for popovers #F7F7EF */
+    --popover-foreground: 40 30% 20%; /* Dark Brown #4D4036 */
+    --primary: 54 71% 74%; /* Pastel Yellow #F0E68C */
+    --primary-foreground: 54 35% 25%; /* Darker yellow-brown #6B6031 */
+    --secondary: 54 50% 85%; /* Lighter pastel yellow #F5EFCC */
+    --secondary-foreground: 54 30% 35%; /* #7C714B */
+    --muted: 60 40% 88%; /* Muted beige #EBEBDD */
+    --muted-foreground: 60 20% 45%; /* #85857A */
+    --accent: 120 60% 75%; /* Soft Green #98E698 */
+    --accent-foreground: 120 40% 20%; /* Dark Green #265926 */
+    --destructive: 0 70% 65%; /* Soft Red #D95C5C */
+    --destructive-foreground: 0 0% 100%; /* White */
+    --border: 60 30% 80%; /* Beige border #DCDCB2 */
+    --input: 60 30% 85%; /* Slightly lighter beige for input #E6E6C7 */
+    --ring: 120 60% 75%; /* Soft Green #98E698 */
+    --chart-1: 54 71% 74%; /* Pastel Yellow */
+    --chart-2: 120 60% 75%; /* Soft Green */
+    --chart-3: 30 60% 70%; /* Soft Orange */
+    --chart-4: 210 60% 70%; /* Soft Blue */
+    --chart-5: 0 60% 70%; /* Soft Red */
+    --radius: 0.5rem;
+
+    /* Sidebar specific theme */
+    --sidebar-background: 56 40% 86%; /* Warm, light earthy tone #E7E4D4 */
+    --sidebar-foreground: 56 20% 30%; /* #615C4E */
+    --sidebar-primary: 120 60% 75%; /* Soft Green for active items */
+    --sidebar-primary-foreground: 120 40% 20%; /* Dark Green */
+    --sidebar-accent: 56 40% 80%; /* Hover color #DAD6C5 */
+    --sidebar-accent-foreground: 56 20% 25%; /* #524D40 */
+    --sidebar-border: 56 30% 75%; /* #CCC8B8 */
+    --sidebar-ring: 120 60% 75%; /* Soft Green */
+  }
+
+  .dark {
+    --background: 40 10% 10%; /* Dark Brownish Grey */
+    --foreground: 60 30% 90%; /* Light Beige for text */
+    --card: 40 10% 15%; /* Slightly lighter dark */
+    --card-foreground: 60 30% 90%;
+    --popover: 40 10% 15%;
+    --popover-foreground: 60 30% 90%;
+    --primary: 54 60% 65%; /* Muted Pastel Yellow */
+    --primary-foreground: 54 71% 95%; /* Lighter for contrast */
+    --secondary: 54 40% 55%; /* Darker Muted Yellow */
+    --secondary-foreground: 54 60% 90%;
+    --muted: 40 10% 20%;
+    --muted-foreground: 60 20% 65%;
+    --accent: 120 50% 60%; /* Muted Soft Green */
+    --accent-foreground: 120 73% 95%; /* Lighter for contrast */
+    --destructive: 0 60% 55%; /* Muted Red */
+    --destructive-foreground: 0 0% 98%;
+    --border: 40 10% 25%;
+    --input: 40 10% 25%;
+    --ring: 120 50% 60%; /* Muted Soft Green */
+    --chart-1: 54 60% 65%;
+    --chart-2: 120 50% 60%;
+    --chart-3: 30 50% 60%;
+    --chart-4: 210 50% 60%;
+    --chart-5: 0 50% 60%;
+
+    /* Dark Sidebar specific theme */
+    --sidebar-background: 40 10% 12%; /* Darker base for sidebar */
+    --sidebar-foreground: 56 20% 70%; /* Lighter text for dark sidebar */
+    --sidebar-primary: 120 50% 60%; /* Muted Soft Green for active */
+    --sidebar-primary-foreground: 120 73% 95%;
+    --sidebar-accent: 40 10% 18%; /* Hover color */
+    --sidebar-accent-foreground: 56 20% 75%;
+    --sidebar-border: 40 10% 22%;
+    --sidebar-ring: 120 50% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
