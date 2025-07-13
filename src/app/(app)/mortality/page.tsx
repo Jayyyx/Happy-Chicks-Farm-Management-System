@@ -3,7 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { createClient } from "@/lib/supabase/server";
 import { AddMortalityRecordForm } from "./add-mortality-record-form";
-import { Button } from "@/components/ui/button";
+import { EditMortalityRecordButton } from "./edit-mortality-record-button";
+import { DeleteMortalityRecordButton } from "./delete-mortality-record-button";
 
 export default async function MortalityPage() {
   const supabase = createClient();
@@ -45,8 +46,9 @@ export default async function MortalityPage() {
                   <TableCell>{record.count}</TableCell>
                   <TableCell className="max-w-xs truncate">{record.cause || 'N/A'}</TableCell>
                   <TableCell>{record.recorded_by}</TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="sm">Edit</Button>
+                  <TableCell className="text-right space-x-1">
+                    <EditMortalityRecordButton record={record} />
+                    <DeleteMortalityRecordButton id={record.id} />
                   </TableCell>
                 </TableRow>
               ))}
