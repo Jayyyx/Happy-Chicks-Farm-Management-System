@@ -80,7 +80,7 @@ export default async function InventoryPage() {
                   </TableCell>
                   <TableCell>{item.unit}</TableCell>
                   <TableCell>{item.supplier || 'N/A'}</TableCell>
-                  <TableCell>{item.cost ? `$${Number(item.cost).toFixed(2)}` : 'N/A'}</TableCell>
+                  <TableCell>{item.cost ? `GH₵${Number(item.cost).toFixed(2)}` : 'N/A'}</TableCell>
                   <TableCell className="text-right space-x-1">
                     <Button variant="ghost" size="icon" className="hover:text-accent" disabled>
                       <Edit className="h-4 w-4" />
