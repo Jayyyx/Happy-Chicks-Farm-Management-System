@@ -62,7 +62,7 @@ export function FarmConfigurationForm({ config }: { config: FarmConfig }) {
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="defaultCurrency">Default Currency</Label>
-            <Input id="defaultCurrency" name="defaultCurrency" defaultValue={config.default_currency ?? ''} />
+            <Input id="defaultCurrency" name="defaultCurrency" placeholder="e.g., GHS" defaultValue={config.default_currency ?? ''} />
             {state.errors?.defaultCurrency && <p className="text-sm font-medium text-destructive">{state.errors.defaultCurrency[0]}</p>}
           </div>
           <div className="space-y-1.5">
