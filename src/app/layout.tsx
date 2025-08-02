@@ -4,8 +4,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'Happy Chicks',
-  description: 'Welcome to Happy Chicks Farm Management',
+  title: 'Happy Chicks - Farm Management System',
+  description: 'Automated Farm Management System for Happy Chicks',
 };
 
 export default function RootLayout({

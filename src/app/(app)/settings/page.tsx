@@ -1,6 +1,6 @@
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Settings2 } from "lucide-react";
+import { Settings2, CircleAlert } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from 'next/navigation';
 import { NotificationSettingsForm } from "./notification-settings-form";
@@ -10,12 +10,12 @@ import { FarmConfigurationForm } from "./farm-configuration-form";
 // A dedicated error component to avoid repeating JSX
 function SettingsErrorCard({ message, details }: { message: string, details?: string }) {
     return (
-        <Card>
+        <Card className="border-destructive">
             <CardHeader>
-                <CardTitle className="text-destructive">Error Loading Settings</CardTitle>
+                <CardTitle className="text-destructive flex items-center gap-2"><CircleAlert /> Error Loading Settings</CardTitle>
                 <CardDescription>
                     {message}
-                    {details && <div className="mt-2 text-xs text-muted-foreground bg-muted p-2 rounded-md">Error details: {details}</div>}
+                    {details && <div className="mt-2 text-xs text-muted-foreground bg-destructive p-2 rounded-md">Error details: {details}</div>}
                 </CardDescription>
             </CardHeader>
         </Card>
@@ -27,46 +27,35 @@ export default async function SettingsPage() {
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-        // This redirect should be handled by middleware, but it's a safeguard.
+        // This redirect should be handled by the layout, but as a safeguard:
         return redirect('/login');
     }
 
-    // Step 1: Fetch user profile
-    const profileResponse = await supabase
+    const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
         .single();
     
-    if (profileResponse.error) {
-        console.error("Supabase profile error:", profileResponse.error.message);
-        return <SettingsErrorCard message="Could not load your user profile from the database." details={profileResponse.error.message} />;
+    if (profileError && profileError.code !== 'PGRST116') { // PGRST116 means no rows found, which we handle
+        console.error("Supabase profile error:", profileError.message);
+        return <SettingsErrorCard message="Could not load your user profile from the database." details={profileError.message} />;
     }
-    if (!profileResponse.data) {
-        return <SettingsErrorCard message="Your user profile could not be found." />;
-    }
-    const profile = profileResponse.data;
-
-    // Step 2: Fetch farm configuration
-    const farmConfigResponse = await supabase
+    
+    const { data: farmConfig, error: farmConfigError } = await supabase
         .from('farm_config')
         .select('*')
         .eq('id', 1) // Assuming a single config row with id 1
         .single();
 
-    if (farmConfigResponse.error) {
-        console.error("Supabase farm config error:", farmConfigResponse.error.message);
-        return <SettingsErrorCard message="Could not load the farm configuration from the database." details={farmConfigResponse.error.message} />;
+    if (farmConfigError && farmConfigError.code !== 'PGRST116') {
+        console.error("Supabase farm config error:", farmConfigError.message);
+        return <SettingsErrorCard message="Could not load the farm configuration from the database." details={farmConfigError.message} />;
     }
-    if (!farmConfigResponse.data) {
-        return <SettingsErrorCard message="The farm configuration could not be found." />;
-    }
-    const farmConfig = farmConfigResponse.data;
-    
-    // Step 3: Determine user role
-    const isManager = profile.role === 'Manager';
 
-    // Step 4: Render the page
+    // Check if the user has the manager role. This is safe even if profile is null.
+    const isManager = profile?.role === 'Manager';
+
     return (
         <div className="space-y-6">
             <Card>
@@ -79,12 +68,20 @@ export default async function SettingsPage() {
             </Card>
 
             <div className="grid gap-6 md:grid-cols-2">
-                <NotificationSettingsForm profile={profile} />
+                {profile ? (
+                    <NotificationSettingsForm profile={profile} />
+                ) : (
+                    <SettingsErrorCard message="Notification settings are unavailable because a user profile has not been created." />
+                )}
                 <AccountSecurityForm email={user.email ?? 'No email available'} />
             </div>
             
             {isManager && (
-                <FarmConfigurationForm config={farmConfig} />
+                farmConfig ? (
+                    <FarmConfigurationForm config={farmConfig} />
+                ) : (
+                     <SettingsErrorCard message="Farm configuration is unavailable." details="No configuration data found in the database. A manager may need to set this up." />
+                )
             )}
         </div>
     );

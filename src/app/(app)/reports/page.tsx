@@ -17,7 +17,7 @@ interface ReportDataRow {
 }
 
 const reportHeaders: { [key: string]: string[] } = {
-    eggProduction: ["Date", "Shed", "Total Eggs", "Broken Eggs"],
+    eggCollection: ["Date", "Shed", "Total Eggs", "Broken Eggs"],
     feedUsage: ["Date", "Shed", "Feed Type", "Quantity Used"],
     brokenEggs: ["Date", "Shed", "Broken Eggs", "Percentage of Total"],
     mortality: ["Date", "Shed", "Mortality Count", "Suspected Cause"]
@@ -70,10 +70,10 @@ export default function ReportsPage() {
 
     try {
         switch (reportType) {
-            case 'eggProduction': {
+            case 'eggCollection': {
                 const { data: dbData, error } = await supabase.from('egg_collections').select('*').gte('date', formattedStartDate).order('date', { ascending: false });
                 if (error) throw error;
-                headers = reportHeaders.eggProduction;
+                headers = reportHeaders.eggCollection;
                 data = dbData.map(d => ({ date: d.date, shed: d.shed, totaleggs: d.total_eggs, brokeneggs: d.broken_eggs }));
                 break;
             }
@@ -179,7 +179,7 @@ export default function ReportsPage() {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Production</SelectLabel>
-                  <SelectItem value="eggProduction">Egg Production</SelectItem>
+                  <SelectItem value="eggCollection">Egg Collection</SelectItem>
                   <SelectItem value="brokenEggs">Broken Eggs</SelectItem>
                 </SelectGroup>
                 <SelectGroup>

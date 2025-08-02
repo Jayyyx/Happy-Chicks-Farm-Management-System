@@ -8,78 +8,78 @@ body {
 
 @layer base {
   :root {
-    --background: 60 56% 91%; /* Light Beige #F5F5DC */
-    --foreground: 40 30% 20%; /* Dark Brown #4D4036 */
-    --card: 60 60% 95%; /* Slightly lighter beige for cards #F7F7EF */
-    --card-foreground: 40 30% 20%; /* Dark Brown #4D4036 */
-    --popover: 60 60% 95%; /* Slightly lighter beige for popovers #F7F7EF */
-    --popover-foreground: 40 30% 20%; /* Dark Brown #4D4036 */
-    --primary: 54 71% 74%; /* Pastel Yellow #F0E68C */
-    --primary-foreground: 54 35% 25%; /* Darker yellow-brown #6B6031 */
-    --secondary: 54 50% 85%; /* Lighter pastel yellow #F5EFCC */
-    --secondary-foreground: 54 30% 35%; /* #7C714B */
-    --muted: 60 40% 88%; /* Muted beige #EBEBDD */
-    --muted-foreground: 60 20% 45%; /* #85857A */
-    --accent: 120 60% 75%; /* Soft Green #98E698 */
-    --accent-foreground: 120 40% 20%; /* Dark Green #265926 */
-    --destructive: 0 70% 65%; /* Soft Red #D95C5C */
+    --background: 48 100% 98%; /* Pale Cream */
+    --foreground: 220 30% 25%; /* Dark Blue/Navy */
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 220 30% 25%; /* Dark Blue/Navy */
+    --popover: 0 0% 100%; /* White */
+    --popover-foreground: 220 30% 25%; /* Dark Blue/Navy */
+    --primary: 48 96% 58%; /* Bright Yellow */
+    --primary-foreground: 220 30% 20%; /* Darker Navy for contrast on yellow */
+    --secondary: 48 100% 90%; /* Light Yellow */
+    --secondary-foreground: 220 30% 25%; /* Dark Blue/Navy */
+    --muted: 48 100% 94%; /* Lighter Yellow/Cream */
+    --muted-foreground: 220 20% 45%; /* Muted Navy */
+    --accent: 30 96% 60%; /* Orange */
+    --accent-foreground: 0 0% 100%; /* White */
+    --destructive: 350 78% 55%; /* Pink/Red */
     --destructive-foreground: 0 0% 100%; /* White */
-    --border: 60 30% 80%; /* Beige border #DCDCB2 */
-    --input: 60 30% 85%; /* Slightly lighter beige for input #E6E6C7 */
-    --ring: 120 60% 75%; /* Soft Green #98E698 */
-    --chart-1: 54 71% 74%; /* Pastel Yellow */
-    --chart-2: 120 60% 75%; /* Soft Green */
-    --chart-3: 30 60% 70%; /* Soft Orange */
-    --chart-4: 210 60% 70%; /* Soft Blue */
-    --chart-5: 0 60% 70%; /* Soft Red */
+    --border: 48 30% 88%; /* Light Yellow/Cream border */
+    --input: 48 30% 92%; /* Lighter Yellow/Cream input */
+    --ring: 48 96% 58%; /* Bright Yellow */
+    --chart-1: 48 96% 58%; /* Bright Yellow */
+    --chart-2: 30 96% 60%; /* Orange */
+    --chart-3: 190 80% 55%; /* A complementary blue */
+    --chart-4: 288 76% 52%; /* Purple */
+    --chart-5: 350 78% 55%; /* Pink/Red */
     --radius: 0.5rem;
 
     /* Sidebar specific theme */
-    --sidebar-background: 56 40% 86%; /* Warm, light earthy tone #E7E4D4 */
-    --sidebar-foreground: 56 20% 30%; /* #615C4E */
-    --sidebar-primary: 120 60% 75%; /* Soft Green for active items */
-    --sidebar-primary-foreground: 120 40% 20%; /* Dark Green */
-    --sidebar-accent: 56 40% 80%; /* Hover color #DAD6C5 */
-    --sidebar-accent-foreground: 56 20% 25%; /* #524D40 */
-    --sidebar-border: 56 30% 75%; /* #CCC8B8 */
-    --sidebar-ring: 120 60% 75%; /* Soft Green */
+    --sidebar-background: 220 30% 22%; /* Dark Navy for Sidebar */
+    --sidebar-foreground: 48 100% 95%; /* Pale Cream Text */
+    --sidebar-primary: 48 96% 58%; /* Bright Yellow for active */
+    --sidebar-primary-foreground: 220 30% 20%; /* Dark text on active */
+    --sidebar-accent: 220 30% 30%; /* Lighter Navy for hover */
+    --sidebar-accent-foreground: 48 100% 95%;
+    --sidebar-border: 220 30% 30%;
+    --sidebar-ring: 48 96% 58%;
   }
 
   .dark {
-    --background: 40 10% 10%; /* Dark Brownish Grey */
-    --foreground: 60 30% 90%; /* Light Beige for text */
-    --card: 40 10% 15%; /* Slightly lighter dark */
-    --card-foreground: 60 30% 90%;
-    --popover: 40 10% 15%;
-    --popover-foreground: 60 30% 90%;
-    --primary: 54 60% 65%; /* Muted Pastel Yellow */
-    --primary-foreground: 54 71% 95%; /* Lighter for contrast */
-    --secondary: 54 40% 55%; /* Darker Muted Yellow */
-    --secondary-foreground: 54 60% 90%;
-    --muted: 40 10% 20%;
-    --muted-foreground: 60 20% 65%;
-    --accent: 120 50% 60%; /* Muted Soft Green */
-    --accent-foreground: 120 73% 95%; /* Lighter for contrast */
-    --destructive: 0 60% 55%; /* Muted Red */
-    --destructive-foreground: 0 0% 98%;
-    --border: 40 10% 25%;
-    --input: 40 10% 25%;
-    --ring: 120 50% 60%; /* Muted Soft Green */
-    --chart-1: 54 60% 65%;
-    --chart-2: 120 50% 60%;
-    --chart-3: 30 50% 60%;
-    --chart-4: 210 50% 60%;
-    --chart-5: 0 50% 60%;
+    --background: 220 40% 10%; /* Very Dark Navy Blue */
+    --foreground: 48 100% 95%; /* Pale Cream */
+    --card: 220 40% 14%; /* Slightly Lighter Navy */
+    --card-foreground: 48 100% 95%; /* Pale Cream */
+    --popover: 220 40% 14%;
+    --popover-foreground: 48 100% 95%;
+    --primary: 48 80% 70%; /* Pastel Yellow */
+    --primary-foreground: 220 30% 15%; /* Dark Navy for text on primary */
+    --secondary: 48 60% 50%; /* Darker Muted Yellow */
+    --secondary-foreground: 48 100% 90%; /* Light Yellow */
+    --muted: 220 40% 20%; /* Muted Navy */
+    --muted-foreground: 220 20% 65%; /* Muted Lighter Navy */
+    --accent: 30 80% 70%; /* Pastel Orange */
+    --accent-foreground: 220 30% 15%; /* Dark Navy for text on accent */
+    --destructive: 350 70% 65%; /* Softer Pink/Red */
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 40% 25%;
+    --input: 220 40% 25%;
+    --ring: 48 80% 70%; /* Pastel Yellow */
+    --chart-1: 48 80% 70%;
+    --chart-2: 30 80% 70%;
+    --chart-3: 190 70% 65%;
+    --chart-4: 288 60% 70%;
+    --chart-5: 350 70% 65%;
 
     /* Dark Sidebar specific theme */
-    --sidebar-background: 40 10% 12%; /* Darker base for sidebar */
-    --sidebar-foreground: 56 20% 70%; /* Lighter text for dark sidebar */
-    --sidebar-primary: 120 50% 60%; /* Muted Soft Green for active */
-    --sidebar-primary-foreground: 120 73% 95%;
-    --sidebar-accent: 40 10% 18%; /* Hover color */
-    --sidebar-accent-foreground: 56 20% 75%;
-    --sidebar-border: 40 10% 22%;
-    --sidebar-ring: 120 50% 60%;
+    --sidebar-background: 220 40% 8%; /* Even Darker Navy for Sidebar */
+    --sidebar-foreground: 48 100% 95%; /* Pale Cream Text */
+    --sidebar-primary: 48 80% 70%; /* Pastel Yellow for active */
+    --sidebar-primary-foreground: 220 30% 15%; /* Dark text on active */
+    --sidebar-accent: 220 40% 18%; /* Hover color */
+    --sidebar-accent-foreground: 48 100% 95%;
+    --sidebar-border: 220 40% 22%;
+    --sidebar-ring: 48 80% 70%;
   }
 }
 

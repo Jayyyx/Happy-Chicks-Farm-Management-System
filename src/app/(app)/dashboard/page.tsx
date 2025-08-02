@@ -40,19 +40,19 @@ async function getDashboardData() {
     // Return empty/default data to prevent crash
     return {
       kpis: {
-        eggProductionRate: 'N/A',
+        totalEggsToday: 'N/A',
         feedConsumption: 'N/A',
         mortalityRate: 'N/A',
         activeBirds: 'N/A',
         brokenEggs: 'N/A',
         feedInventory: 'N/A',
-        eggProductionTrend: 'N/A',
+        eggCollectionTrend: 'N/A',
         feedConsumptionTrend: 'N/A',
         mortalityRateTrend: 'N/A',
         brokenEggsTrend: 'N/A'
       },
       charts: {
-        eggProductionTrend: [],
+        eggCollectionTrend: [],
         feedConsumptionAnalysis: [],
         mortalityRateTrend: []
       },
@@ -78,9 +78,9 @@ async function getDashboardData() {
   const totalEggsToday = eggsToday.reduce((acc, curr) => acc + curr.total_eggs, 0);
   const totalEggsYesterday = eggsYesterday.reduce((acc, curr) => acc + curr.total_eggs, 0);
 
-  const eggProductionRate = activeBirds > 0 ? (totalEggsToday / activeBirds) * 100 : 0;
-  const eggProductionRateYesterday = activeBirds > 0 ? (totalEggsYesterday / activeBirds) * 100 : 0;
-  const eggProductionTrend = eggProductionRate - eggProductionRateYesterday;
+  const eggCollectionRate = activeBirds > 0 ? (totalEggsToday / activeBirds) * 100 : 0;
+  const eggCollectionRateYesterday = activeBirds > 0 ? (totalEggsYesterday / activeBirds) * 100 : 0;
+  const eggCollectionTrend = eggCollectionRate - eggCollectionRateYesterday;
 
   const feedToday = allocations.filter(a => a.date === todayStr);
   const feedYesterday = allocations.filter(a => a.date === yesterdayStr);
@@ -151,19 +151,19 @@ async function getDashboardData() {
 
   return {
     kpis: {
-      eggProductionRate: `${totalEggsToday} Eggs`,
+      totalEggsToday: `${totalEggsToday} Eggs`,
       feedConsumption: `${feedConsumptionToday} kg/day`,
       mortalityRate: `${mortalityRate.toFixed(1)}%`,
       activeBirds: activeBirds.toLocaleString(),
       brokenEggs: `${brokenEggsToday}/day`,
       feedInventory: `${feedInventory} Bags`,
-      eggProductionTrend: `${eggProductionTrend >= 0 ? '+' : ''}${eggProductionTrend.toFixed(1)}% from yesterday`,
+      eggCollectionTrend: `${eggCollectionTrend >= 0 ? '+' : ''}${eggCollectionTrend.toFixed(1)}% from yesterday`,
       feedConsumptionTrend: `${feedConsumptionTrend >= 0 ? '+' : ''}${feedConsumptionTrend}kg from yesterday`,
       mortalityRateTrend: `${mortalityRateTrend >= 0 ? '+' : ''}${mortalityRateTrend.toFixed(2)}% from last month`,
       brokenEggsTrend: `${brokenEggsTrend >= 0 ? '+' : ''}${brokenEggsTrend} from yesterday`
     },
     charts: {
-      eggProductionTrend: weeklyEggData,
+      eggCollectionTrend: weeklyEggData,
       feedConsumptionAnalysis,
       mortalityRateTrend: monthlyMortalityData
     },

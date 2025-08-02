@@ -43,11 +43,11 @@ export function DashboardClientContent({ kpis, charts, activityLog }: { kpis: an
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <KpiCard
           title="Total Eggs Collected"
-          value={kpis.eggProductionRate}
+          value={kpis.totalEggsToday}
           icon={<EggIcon className="h-6 w-6 text-accent" />}
           description="Total eggs collected today"
-          trend={kpis.eggProductionTrend}
-          trendColor={kpis.eggProductionTrend.startsWith('+') ? 'text-green-600' : 'text-red-600'}
+          trend={kpis.eggCollectionTrend}
+          trendColor={kpis.eggCollectionTrend.startsWith('+') ? 'text-green-600' : 'text-red-600'}
         />
         <KpiCard
           title="Feed Consumption"
@@ -91,9 +91,9 @@ export function DashboardClientContent({ kpis, charts, activityLog }: { kpis: an
 
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
         <SampleLineChart
-          title="Egg Production Trend"
+          title="Egg Collection Trend"
           description="Total eggs collected over the last 6 weeks."
-          data={charts.eggProductionTrend}
+          data={charts.eggCollectionTrend}
           dataKeys={{x: "date", y: "value"}}
           config={{ value: { label: "Total Eggs", color: "hsl(var(--chart-1))" } }}
           yAxisFormatter={(value) => `${value}`}

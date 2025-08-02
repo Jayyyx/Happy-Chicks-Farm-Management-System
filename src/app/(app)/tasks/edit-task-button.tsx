@@ -28,6 +28,7 @@ type Task = {
 interface EditTaskButtonProps {
   task: Task;
   users: { id: string; full_name: string | null }[];
+  isManager: boolean;
 }
 
 function SubmitButton() {
@@ -39,7 +40,7 @@ function SubmitButton() {
   );
 }
 
-export function EditTaskButton({ task, users }: EditTaskButtonProps) {
+export function EditTaskButton({ task, users, isManager }: EditTaskButtonProps) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const initialState: TaskFormState = { message: "", success: undefined };
@@ -78,7 +79,7 @@ export function EditTaskButton({ task, users }: EditTaskButtonProps) {
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="assigned_to_id_edit">Assign To</Label>
-              <Select name="assigned_to_id" defaultValue={task.profiles?.id ?? 'unassigned'}>
+              <Select name="assigned_to_id" defaultValue={task.profiles?.id ?? 'unassigned'} disabled={!isManager}>
                 <SelectTrigger id="assigned_to_id_edit"><SelectValue placeholder="Select user" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="unassigned">Unassigned</SelectItem>
@@ -87,6 +88,7 @@ export function EditTaskButton({ task, users }: EditTaskButtonProps) {
                   ))}
                 </SelectContent>
               </Select>
+               {!isManager && <p className="text-xs text-muted-foreground">Only managers can assign tasks.</p>}
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="due_date_edit">Due Date (Optional)</Label>

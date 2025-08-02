@@ -8,17 +8,16 @@ import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui
 import { EggIcon } from "@/components/icons/EggIcon";
 import { FeedIcon } from "@/components/icons/FeedIcon";
 import { BirdIcon } from "@/components/icons/BirdIcon";
-import { LayoutDashboard, FileText, Lightbulb, Settings2, Users, ListChecks, ShoppingCart } from "lucide-react";
+import { LayoutDashboard, FileText, Settings2, Users, ListChecks, ShoppingCart } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/inventory", label: "Inventory", icon: FeedIcon },
-  { href: "/egg-production", label: "Egg Production", icon: EggIcon },
-  { href: "/mortality", label: "Mortality Tracking", icon: BirdIcon },
+  { href: "/egg-collection", label: "Egg Collection", icon: EggIcon },
+  { href: "/mortality", label: "Mortality Record", icon: BirdIcon },
   { href: "/tasks", label: "Task Management", icon: ListChecks },
   { href: "/sales", label: "Sales Tracking", icon: ShoppingCart },
   { href: "/reports", label: "Reports", icon: FileText },
-  { href: "/optimize", label: "AI Optimizer", icon: Lightbulb },
   { href: "/settings", label: "Settings", icon: Settings2 },
   { href: "/users", label: "User Management", icon: Users },
 ];

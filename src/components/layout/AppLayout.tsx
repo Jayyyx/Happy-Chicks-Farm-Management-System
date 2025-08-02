@@ -21,34 +21,11 @@ import {
 import { SidebarNav } from "@/components/navigation/SidebarNav";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
-
-// Simple Theme Toggle (conceptual, full implementation would use context/localStorage)
-function ThemeToggle() {
-  const [isDarkMode, setIsDarkMode] = React.useState(false);
-  React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsDarkMode(document.documentElement.classList.contains('dark'));
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    if (typeof window !== "undefined") {
-      document.documentElement.classList.toggle("dark");
-      setIsDarkMode(!isDarkMode);
-    }
-  };
-
-  return (
-    <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
-      {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-    </Button>
-  );
-}
-
+import { ThemeToggle } from "./ThemeToggle";
 
 export function AppLayout({ children, user }: { children: React.ReactNode; user: User }) {
   const router = useRouter();

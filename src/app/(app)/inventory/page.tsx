@@ -3,18 +3,45 @@ import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { CircleAlert, Edit } from "lucide-react";
+import { CircleAlert, Edit, PackagePlus, Send } from "lucide-react";
 import { AddFeedStockForm } from "./add-feed-stock-form";
 import { AddFeedAllocationForm } from "./add-feed-allocation-form";
 import { DeleteFeedStockButton, DeleteFeedAllocationButton } from "./delete-buttons";
 
 export default async function InventoryPage() {
   const supabase = createClient();
-  const { data: feedStock, error: stockError } = await supabase.from('feed_stock').select('*').order('date', { ascending: false });
-  const { data: feedAllocations, error: allocationError } = await supabase.from('feed_allocations').select('*').order('date', { ascending: false });
+  
+  const [stockResponse, allocationResponse] = await Promise.all([
+    supabase.from('feed_stock').select('*').order('date', { ascending: false }),
+    supabase.from('feed_allocations').select('*').order('date', { ascending: false })
+  ]);
 
-  if (stockError) console.error("Supabase stock fetch error:", stockError.message);
-  if (allocationError) console.error("Supabase allocation fetch error:", allocationError.message);
+  const { data: feedStock, error: stockError } = stockResponse;
+  const { data: feedAllocations, error: allocationError } = allocationResponse;
+
+  if (stockError || allocationError) {
+    const errorMessage = stockError?.message || allocationError?.message;
+    console.error("Inventory page fetch error:", errorMessage);
+    return (
+        <div className="space-y-6">
+            <Card className="border-destructive">
+                <CardHeader>
+                    <CardTitle className="text-destructive flex items-center gap-2">
+                        <CircleAlert /> Error Loading Inventory
+                    </CardTitle>
+                    <CardDescription>
+                        Could not fetch inventory data from the database. Please try refreshing the page.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-destructive-foreground bg-destructive p-3 rounded-md">
+                        Details: {errorMessage}
+                    </p>
+                </CardContent>
+            </Card>
+        </div>
+    );
+  }
 
   const lowStockThreshold = 20; // Example: 20 bags/kg
 
@@ -24,7 +51,9 @@ export default async function InventoryPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline">Current Feed Stock</CardTitle>
+          <CardTitle className="font-headline flex items-center gap-2">
+            <PackagePlus className="h-6 w-6 text-primary" /> Current Feed Stock
+          </CardTitle>
           <CardDescription>Overview of available feed inventory.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -53,7 +82,7 @@ export default async function InventoryPage() {
                   <TableCell>{item.supplier || 'N/A'}</TableCell>
                   <TableCell>{item.cost ? `$${Number(item.cost).toFixed(2)}` : 'N/A'}</TableCell>
                   <TableCell className="text-right space-x-1">
-                    <Button variant="ghost" size="icon" className="hover:text-accent" disabled> {/* TODO: Edit functionality */}
+                    <Button variant="ghost" size="icon" className="hover:text-accent" disabled>
                       <Edit className="h-4 w-4" />
                     </Button>
                     <DeleteFeedStockButton id={item.id} />
@@ -74,7 +103,9 @@ export default async function InventoryPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline">Feed Allocation Log</CardTitle>
+          <CardTitle className="font-headline flex items-center gap-2">
+            <Send className="h-6 w-6 text-primary" /> Feed Allocation Log
+          </CardTitle>
           <CardDescription>Record of feed allocated to different sheds.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -100,7 +131,7 @@ export default async function InventoryPage() {
                   <TableCell>{item.unit}</TableCell>
                   <TableCell>{item.allocated_by}</TableCell>
                   <TableCell className="text-right space-x-1">
-                     <Button variant="ghost" size="icon" className="hover:text-accent" disabled> {/* TODO: Edit functionality */}
+                     <Button variant="ghost" size="icon" className="hover:text-accent" disabled>
                         <Edit className="h-4 w-4" />
                      </Button>
                     <DeleteFeedAllocationButton id={item.id} />

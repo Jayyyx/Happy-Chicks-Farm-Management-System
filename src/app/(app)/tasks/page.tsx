@@ -11,7 +11,9 @@ import { DeleteTaskButton } from "./delete-task-button";
 export default async function TasksPage() {
   const supabase = createClient();
   
-  const [tasksResponse, usersResponse] = await Promise.all([
+  const { data: { user: currentUser } } = await supabase.auth.getUser();
+
+  const [tasksResponse, usersResponse, profileResponse] = await Promise.all([
     supabase
       .from('tasks')
       .select(`
@@ -29,14 +31,16 @@ export default async function TasksPage() {
       .order('created_at', { ascending: false }),
     supabase
       .from('user_details')
-      .select('id, full_name')
+      .select('id, full_name'),
+    currentUser ? supabase.from('profiles').select('role').eq('id', currentUser.id).single() : Promise.resolve({ data: null, error: null })
   ]);
 
   const { data: tasks, error: tasksError } = tasksResponse;
   const { data: users, error: usersError } = usersResponse;
+  const { data: profile, error: profileError } = profileResponse;
   
-  if (tasksError || usersError) {
-    const errorMessage = tasksError?.message || usersError?.message;
+  if (tasksError || usersError || profileError) {
+    const errorMessage = tasksError?.message || usersError?.message || profileError?.message;
     console.error("Error fetching data for tasks page:", errorMessage);
     return (
         <Card>
@@ -51,6 +55,8 @@ export default async function TasksPage() {
     );
   }
 
+  const isManager = profile?.role === 'Manager';
+
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
       case 'Completed': return { variant: 'default', className: 'bg-green-600 text-white' };
@@ -64,7 +70,7 @@ export default async function TasksPage() {
 
   return (
     <div className="space-y-6">
-      <AddTaskForm users={users ?? []} />
+      <AddTaskForm users={users ?? []} isManager={isManager} />
 
       <Card>
         <CardHeader>
@@ -102,7 +108,7 @@ export default async function TasksPage() {
                     </TableCell>
                     <TableCell>{new Date(task.created_at).toLocaleDateString()}</TableCell>
                     <TableCell className="text-right space-x-1">
-                      <EditTaskButton task={task as any} users={users ?? []} />
+                      <EditTaskButton task={task as any} users={users ?? []} isManager={isManager} />
                       <DeleteTaskButton taskId={task.id} />
                     </TableCell>
                   </TableRow>

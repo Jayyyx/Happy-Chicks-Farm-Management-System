@@ -15,6 +15,7 @@ import { addTask, type TaskFormState } from './actions';
 
 interface AddTaskFormProps {
   users: { id: string; full_name: string | null }[];
+  isManager: boolean;
 }
 
 function SubmitButton() {
@@ -26,7 +27,7 @@ function SubmitButton() {
   );
 }
 
-export function AddTaskForm({ users }: AddTaskFormProps) {
+export function AddTaskForm({ users, isManager }: AddTaskFormProps) {
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
   const initialState: TaskFormState = { message: "", success: false };
@@ -62,7 +63,7 @@ export function AddTaskForm({ users }: AddTaskFormProps) {
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="assigned_to_id">Assign To</Label>
-            <Select name="assigned_to_id" defaultValue="unassigned">
+            <Select name="assigned_to_id" defaultValue="unassigned" disabled={!isManager}>
               <SelectTrigger id="assigned_to_id"><SelectValue placeholder="Select user" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="unassigned">Unassigned</SelectItem>
@@ -71,6 +72,7 @@ export function AddTaskForm({ users }: AddTaskFormProps) {
                 ))}
               </SelectContent>
             </Select>
+            {!isManager && <p className="text-xs text-muted-foreground">Only managers can assign tasks to other users.</p>}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="due_date">Due Date (Optional)</Label>

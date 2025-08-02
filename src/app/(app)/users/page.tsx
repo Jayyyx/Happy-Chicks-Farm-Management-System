@@ -11,19 +11,20 @@ import { DeleteUserButton } from "./delete-user-button";
 
 export default async function UserManagementPage() {
   const supabase = createClient();
+  
   const { data: { user: currentUser } } = await supabase.auth.getUser();
 
+  // Use the new user_details view which joins auth.users and profiles
   const { data: users, error } = await supabase
     .from('user_details')
     .select('*')
     .order('email');
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', currentUser?.id!)
-    .single();
     
+  // The current user's role is still needed from the profiles table
+  const { data: profile } = currentUser 
+    ? await supabase.from('profiles').select('role').eq('id', currentUser.id).single()
+    : { data: null };
+
   const isManager = profile?.role === 'Manager';
 
   if (error) {
@@ -83,7 +84,7 @@ export default async function UserManagementPage() {
                   </TableCell>
                   <TableCell>
                     <Badge variant={user.status === 'Active' ? 'outline' : 'destructive'} className={user.status === 'Active' ? 'border-green-500 text-green-600' : ''}>
-                      {user.status}
+                      {user.status || 'Invited'}
                     </Badge>
                   </TableCell>
                   <TableCell>{user.last_sign_in_at ? `${formatDistanceToNow(new Date(user.last_sign_in_at))} ago` : 'Never'}</TableCell>
