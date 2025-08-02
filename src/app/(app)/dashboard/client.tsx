@@ -42,10 +42,10 @@ export function DashboardClientContent({ kpis, charts, activityLog }: { kpis: an
     <div className="space-y-6">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <KpiCard
-          title="Egg Production Rate"
+          title="Total Eggs Collected"
           value={kpis.eggProductionRate}
           icon={<EggIcon className="h-6 w-6 text-accent" />}
-          description="Average daily lay rate"
+          description="Total eggs collected today"
           trend={kpis.eggProductionTrend}
           trendColor={kpis.eggProductionTrend.startsWith('+') ? 'text-green-600' : 'text-red-600'}
         />
