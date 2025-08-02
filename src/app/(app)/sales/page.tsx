@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit3, DollarSign } from "lucide-react";
+import { Edit3, CircleDollarSign } from "lucide-react";
 import { AddSaleForm } from "./add-sale-form";
 import { DeleteSaleButton } from "./delete-button";
 
@@ -24,7 +24,7 @@ export default async function SalesPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline flex items-center gap-2"><DollarSign className="h-6 w-6 text-primary"/> Sales Log</CardTitle>
+          <CardTitle className="font-headline flex items-center gap-2"><CircleDollarSign className="h-6 w-6 text-primary"/> Sales Log</CardTitle>
           <CardDescription>History of all recorded sales transactions.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -35,8 +35,8 @@ export default async function SalesPage() {
                 <TableHead>Item Sold</TableHead>
                 <TableHead>Quantity</TableHead>
                 <TableHead>Unit</TableHead>
-                <TableHead>Unit Price</TableHead>
-                <TableHead>Total Price</TableHead>
+                <TableHead>Unit Price (GH₵)</TableHead>
+                <TableHead>Total Price (GH₵)</TableHead>
                 <TableHead>Customer</TableHead>
                 <TableHead>Recorded By</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
