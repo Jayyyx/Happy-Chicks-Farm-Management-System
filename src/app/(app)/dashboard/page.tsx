@@ -151,7 +151,7 @@ async function getDashboardData() {
 
   return {
     kpis: {
-      eggProductionRate: `${eggProductionRate.toFixed(1)}%`,
+      eggProductionRate: `${totalEggsToday} Eggs`,
       feedConsumption: `${feedConsumptionToday} kg/day`,
       mortalityRate: `${mortalityRate.toFixed(1)}%`,
       activeBirds: activeBirds.toLocaleString(),
