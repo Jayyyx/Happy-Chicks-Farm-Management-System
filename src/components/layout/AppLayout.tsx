@@ -84,7 +84,7 @@ export function AppLayout({ children, user }: { children: React.ReactNode; user:
               <span className="text-xs text-muted-foreground">{user.email}</span>
             </div>
           </div>
-          <div className="flex items-center justify-end group-data-[collapsible=icon]:justify-center">
+          <div className="flex items-center justify-end group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:gap-2">
             <Button variant="ghost" size="icon" className="text-sidebar-foreground hover:text-destructive" aria-label="Logout" onClick={handleLogout}>
               <LogOut className="h-5 w-5" />
             </Button>
