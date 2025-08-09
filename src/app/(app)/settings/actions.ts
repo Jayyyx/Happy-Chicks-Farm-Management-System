@@ -107,6 +107,7 @@ export async function updatePassword(prevState: AccountFormState | undefined, fo
 const farmConfigSchema = z.object({
   farmName: z.string().min(1, 'Farm name is required.'),
   shedCount: z.coerce.number().int().min(0, 'Shed count cannot be negative.'),
+  initialBirdCount: z.coerce.number().int().min(0, 'Initial bird count cannot be negative.'),
   defaultCurrency: z.string().min(1, 'Currency is required.'),
   timezone: z.string().min(1, 'Timezone is required.'),
 });
@@ -127,6 +128,7 @@ export async function updateFarmConfiguration(prevState: FarmConfigFormState | u
   const validatedFields = farmConfigSchema.safeParse({
     farmName: formData.get('farmName'),
     shedCount: formData.get('shedCount'),
+    initialBirdCount: formData.get('initialBirdCount'),
     defaultCurrency: formData.get('defaultCurrency'),
     timezone: formData.get('timezone'),
   });
@@ -139,7 +141,7 @@ export async function updateFarmConfiguration(prevState: FarmConfigFormState | u
     };
   }
   
-  const { farmName, shedCount, defaultCurrency, timezone } = validatedFields.data;
+  const { farmName, shedCount, initialBirdCount, defaultCurrency, timezone } = validatedFields.data;
 
   const supabase = createClient();
   const { error } = await supabase
@@ -147,6 +149,7 @@ export async function updateFarmConfiguration(prevState: FarmConfigFormState | u
     .update({
         farm_name: farmName,
         shed_count: shedCount,
+        initial_bird_count: initialBirdCount,
         default_currency: defaultCurrency,
         timezone: timezone,
         updated_at: new Date().toISOString(),
@@ -159,5 +162,6 @@ export async function updateFarmConfiguration(prevState: FarmConfigFormState | u
   }
 
   revalidatePath('/settings');
+  revalidatePath('/dashboard');
   return { message: 'Farm configuration updated successfully.', success: true };
 }
