@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BirdIcon } from "@/components/icons/BirdIcon";
 import { PlusCircle, Loader2 } from "lucide-react";
 import { addMortalityRecord, type FormState } from './actions';
@@ -83,8 +83,21 @@ export function AddMortalityRecordForm() {
             {state.errors?.recorded_by && <p className="text-sm font-medium text-destructive">{state.errors.recorded_by[0]}</p>}
           </div>
           <div className="space-y-1.5 md:col-span-2">
-            <Label htmlFor="cause">Suspected Cause / Notes</Label>
-            <Textarea id="cause" name="cause" placeholder="e.g., Natural, disease, injury..." />
+            <Label htmlFor="cause">Suspected Cause</Label>
+            <Select name="cause">
+                <SelectTrigger id="cause">
+                    <SelectValue placeholder="Select a cause" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="Natural">Natural</SelectItem>
+                    <SelectItem value="Disease">Disease</SelectItem>
+                    <SelectItem value="Injury">Injury</SelectItem>
+                    <SelectItem value="Predator Attack">Predator Attack</SelectItem>
+                    <SelectItem value="Culling">Culling</SelectItem>
+                    <SelectItem value="Unknown">Unknown</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+            </Select>
              {state.errors?.cause && <p className="text-sm font-medium text-destructive">{state.errors.cause[0]}</p>}
           </div>
         </CardContent>
