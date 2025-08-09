@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 type FarmConfig = {
   farm_name: string | null;
   shed_count: number | null;
+  initial_bird_count: number | null;
   default_currency: string | null;
   timezone: string | null;
 };
@@ -61,11 +62,16 @@ export function FarmConfigurationForm({ config }: { config: FarmConfig }) {
             {state.errors?.shedCount && <p className="text-sm font-medium text-destructive">{state.errors.shedCount[0]}</p>}
           </div>
           <div className="space-y-1.5">
+            <Label htmlFor="initialBirdCount">Initial Bird Count</Label>
+            <Input id="initialBirdCount" name="initialBirdCount" type="number" defaultValue={config.initial_bird_count ?? 0} />
+            {state.errors?.initialBirdCount && <p className="text-sm font-medium text-destructive">{state.errors.initialBirdCount[0]}</p>}
+          </div>
+          <div className="space-y-1.5">
             <Label htmlFor="defaultCurrency">Default Currency</Label>
             <Input id="defaultCurrency" name="defaultCurrency" placeholder="e.g., GHS" defaultValue={config.default_currency ?? ''} />
             {state.errors?.defaultCurrency && <p className="text-sm font-medium text-destructive">{state.errors.defaultCurrency[0]}</p>}
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 md:col-span-2">
             <Label htmlFor="timezone">Timezone</Label>
             <Input id="timezone" name="timezone" defaultValue={config.timezone ?? ''} />
             {state.errors?.timezone && <p className="text-sm font-medium text-destructive">{state.errors.timezone[0]}</p>}
