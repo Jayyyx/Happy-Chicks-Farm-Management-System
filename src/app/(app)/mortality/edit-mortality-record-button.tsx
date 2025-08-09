@@ -6,7 +6,7 @@ import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Edit, Loader2 } from "lucide-react";
 import { updateMortalityRecord, type FormState } from './actions';
 import { useToast } from "@/hooks/use-toast";
@@ -94,8 +94,21 @@ export function EditMortalityRecordButton({ record }: { record: MortalityRecord 
                         {state.errors?.recorded_by && <p className="text-sm font-medium text-destructive">{state.errors.recorded_by[0]}</p>}
                     </div>
                     <div className="space-y-1.5 md:col-span-2">
-                        <Label htmlFor="cause-edit">Suspected Cause / Notes</Label>
-                        <Textarea id="cause-edit" name="cause" placeholder="e.g., Natural, disease, injury..." defaultValue={record.cause ?? ''}/>
+                        <Label htmlFor="cause-edit">Suspected Cause</Label>
+                        <Select name="cause" defaultValue={record.cause ?? 'Unknown'}>
+                            <SelectTrigger id="cause-edit">
+                                <SelectValue placeholder="Select a cause" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="Natural">Natural</SelectItem>
+                                <SelectItem value="Disease">Disease</SelectItem>
+                                <SelectItem value="Injury">Injury</SelectItem>
+                                <SelectItem value="Predator Attack">Predator Attack</SelectItem>
+                                <SelectItem value="Culling">Culling</SelectItem>
+                                <SelectItem value="Unknown">Unknown</SelectItem>
+                                <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                        </Select>
                         {state.errors?.cause && <p className="text-sm font-medium text-destructive">{state.errors.cause[0]}</p>}
                     </div>
                 </div>
