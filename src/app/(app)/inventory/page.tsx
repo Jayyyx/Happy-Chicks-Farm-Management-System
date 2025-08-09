@@ -3,10 +3,11 @@ import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { CircleAlert, Edit, PackagePlus, Send } from "lucide-react";
+import { CircleAlert, PackagePlus, Send } from "lucide-react";
 import { AddFeedStockForm } from "./add-feed-stock-form";
 import { AddFeedAllocationForm } from "./add-feed-allocation-form";
 import { DeleteFeedStockButton, DeleteFeedAllocationButton } from "./delete-buttons";
+import { EditFeedStockButton, EditFeedAllocationButton } from "./edit-buttons";
 
 export default async function InventoryPage() {
   const supabase = createClient();
@@ -82,9 +83,7 @@ export default async function InventoryPage() {
                   <TableCell>{item.supplier || 'N/A'}</TableCell>
                   <TableCell>{item.cost ? `GH₵${Number(item.cost).toFixed(2)}` : 'N/A'}</TableCell>
                   <TableCell className="text-right space-x-1">
-                    <Button variant="ghost" size="icon" className="hover:text-accent" disabled>
-                      <Edit className="h-4 w-4" />
-                    </Button>
+                    <EditFeedStockButton record={item} />
                     <DeleteFeedStockButton id={item.id} />
                   </TableCell>
                 </TableRow>
@@ -131,9 +130,7 @@ export default async function InventoryPage() {
                   <TableCell>{item.unit}</TableCell>
                   <TableCell>{item.allocated_by}</TableCell>
                   <TableCell className="text-right space-x-1">
-                     <Button variant="ghost" size="icon" className="hover:text-accent" disabled>
-                        <Edit className="h-4 w-4" />
-                     </Button>
+                     <EditFeedAllocationButton record={item} />
                     <DeleteFeedAllocationButton id={item.id} />
                   </TableCell>
                 </TableRow>
@@ -147,7 +144,7 @@ export default async function InventoryPage() {
           </Table>
         </CardContent>
          <CardFooter className="flex justify-end">
-            <Button variant="outline" disabled>View Full Allocation History</Button>
+            <Button variant="outline">View Full Allocation History</Button>
         </CardFooter>
       </Card>
     </div>
