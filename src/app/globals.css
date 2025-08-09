@@ -8,44 +8,6 @@ body {
 
 @layer base {
   :root {
-    --background: 48 100% 98%; /* Pale Cream */
-    --foreground: 220 30% 25%; /* Dark Blue/Navy */
-    --card: 0 0% 100%; /* White */
-    --card-foreground: 220 30% 25%; /* Dark Blue/Navy */
-    --popover: 0 0% 100%; /* White */
-    --popover-foreground: 220 30% 25%; /* Dark Blue/Navy */
-    --primary: 48 96% 58%; /* Bright Yellow */
-    --primary-foreground: 220 30% 20%; /* Darker Navy for contrast on yellow */
-    --secondary: 48 100% 90%; /* Light Yellow */
-    --secondary-foreground: 220 30% 25%; /* Dark Blue/Navy */
-    --muted: 48 100% 94%; /* Lighter Yellow/Cream */
-    --muted-foreground: 220 20% 45%; /* Muted Navy */
-    --accent: 30 96% 60%; /* Orange */
-    --accent-foreground: 0 0% 100%; /* White */
-    --destructive: 350 78% 55%; /* Pink/Red */
-    --destructive-foreground: 0 0% 100%; /* White */
-    --border: 48 30% 88%; /* Light Yellow/Cream border */
-    --input: 48 30% 92%; /* Lighter Yellow/Cream input */
-    --ring: 48 96% 58%; /* Bright Yellow */
-    --chart-1: 48 96% 58%; /* Bright Yellow */
-    --chart-2: 30 96% 60%; /* Orange */
-    --chart-3: 190 80% 55%; /* A complementary blue */
-    --chart-4: 288 76% 52%; /* Purple */
-    --chart-5: 350 78% 55%; /* Pink/Red */
-    --radius: 0.5rem;
-
-    /* Sidebar specific theme */
-    --sidebar-background: 220 30% 22%; /* Dark Navy for Sidebar */
-    --sidebar-foreground: 48 100% 95%; /* Pale Cream Text */
-    --sidebar-primary: 48 96% 58%; /* Bright Yellow for active */
-    --sidebar-primary-foreground: 220 30% 20%; /* Dark text on active */
-    --sidebar-accent: 220 30% 30%; /* Lighter Navy for hover */
-    --sidebar-accent-foreground: 48 100% 95%;
-    --sidebar-border: 220 30% 30%;
-    --sidebar-ring: 48 96% 58%;
-  }
-
-  .dark {
     --background: 220 40% 10%; /* Very Dark Navy Blue */
     --foreground: 48 100% 95%; /* Pale Cream */
     --card: 220 40% 14%; /* Slightly Lighter Navy */
@@ -70,8 +32,9 @@ body {
     --chart-3: 190 70% 65%;
     --chart-4: 288 60% 70%;
     --chart-5: 350 70% 65%;
+    --radius: 0.5rem;
 
-    /* Dark Sidebar specific theme */
+    /* Sidebar specific theme */
     --sidebar-background: 220 40% 8%; /* Even Darker Navy for Sidebar */
     --sidebar-foreground: 48 100% 95%; /* Pale Cream Text */
     --sidebar-primary: 48 80% 70%; /* Pastel Yellow for active */
