@@ -44,6 +44,7 @@ export function EditMortalityRecordButton({ record }: { record: MortalityRecord 
   const [open, setOpen] = useState(false);
   const initialState: FormState = { message: "", success: undefined };
   const [state, formAction] = useActionState(updateMortalityRecord, initialState);
+  const sheds = ["Shed A", "Shed B", "Shed C", "Shed D", "Shed E"];
 
   useEffect(() => {
       if (state.message) {
@@ -80,7 +81,16 @@ export function EditMortalityRecordButton({ record }: { record: MortalityRecord 
                     </div>
                     <div className="space-y-1.5">
                         <Label htmlFor="shed-edit">Shed</Label>
-                        <Input id="shed-edit" name="shed" placeholder="e.g., Shed A" defaultValue={record.shed} />
+                        <Select name="shed" defaultValue={record.shed}>
+                          <SelectTrigger id="shed-edit">
+                            <SelectValue placeholder="Select a shed" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {sheds.map((shed) => (
+                              <SelectItem key={shed} value={shed}>{shed}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         {state.errors?.shed && <p className="text-sm font-medium text-destructive">{state.errors.shed[0]}</p>}
                     </div>
                     <div className="space-y-1.5">
