@@ -10,6 +10,7 @@ import { Edit, Loader2 } from "lucide-react";
 import { updateEggCollection, type FormState } from './actions';
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type EggCollectionRecord = {
   id: string;
@@ -43,6 +44,7 @@ export function EditEggRecordButton({ record }: { record: EggCollectionRecord })
   const [open, setOpen] = useState(false);
   const initialState: FormState = { message: "", success: undefined };
   const [state, formAction] = useActionState(updateEggCollection, initialState);
+  const sheds = ["Shed A", "Shed B", "Shed C", "Shed D", "Shed E"];
 
   useEffect(() => {
       if (state.message) {
@@ -79,7 +81,16 @@ export function EditEggRecordButton({ record }: { record: EggCollectionRecord })
                     </div>
                     <div className="space-y-1.5">
                         <Label htmlFor="shed-edit">Shed</Label>
-                        <Input id="shed-edit" name="shed" placeholder="e.g., Shed A" defaultValue={record.shed} />
+                        <Select name="shed" defaultValue={record.shed}>
+                          <SelectTrigger id="shed-edit">
+                            <SelectValue placeholder="Select a shed" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {sheds.map((shed) => (
+                              <SelectItem key={shed} value={shed}>{shed}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         {state.errors?.shed && <p className="text-sm font-medium text-destructive">{state.errors.shed[0]}</p>}
                     </div>
                     <div className="space-y-1.5">
