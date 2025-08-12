@@ -136,6 +136,7 @@ export function EditFeedAllocationButton({ record }: { record: FeedAllocationRec
   const [open, setOpen] = useState(false);
   const initialState: FormState = { message: "", success: undefined };
   const [state, formAction] = useActionState(updateFeedAllocation, initialState);
+  const sheds = ["Shed A", "Shed B", "Shed C", "Shed D", "Shed E"];
 
   useEffect(() => {
       if (state.message) {
@@ -172,7 +173,16 @@ export function EditFeedAllocationButton({ record }: { record: FeedAllocationRec
                     </div>
                     <div className="space-y-1.5">
                         <Label htmlFor="shed-alloc-edit">Shed</Label>
-                        <Input id="shed-alloc-edit" name="shed" defaultValue={record.shed} />
+                         <Select name="shed" defaultValue={record.shed}>
+                          <SelectTrigger id="shed-alloc-edit">
+                            <SelectValue placeholder="Select a shed" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {sheds.map((shed) => (
+                              <SelectItem key={shed} value={shed}>{shed}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         {state.errors?.shed && <p className="text-sm font-medium text-destructive">{state.errors.shed[0]}</p>}
                     </div>
                     <div className="space-y-1.5">
