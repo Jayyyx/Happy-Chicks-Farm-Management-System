@@ -8,17 +8,22 @@ import { AddFeedStockForm } from "./add-feed-stock-form";
 import { AddFeedAllocationForm } from "./add-feed-allocation-form";
 import { DeleteFeedStockButton, DeleteFeedAllocationButton } from "./delete-buttons";
 import { EditFeedStockButton, EditFeedAllocationButton } from "./edit-buttons";
+import { format } from "date-fns";
 
 export default async function InventoryPage() {
   const supabase = createClient();
   
-  const [stockResponse, allocationResponse] = await Promise.all([
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  const [stockResponse, allocationResponse, profileResponse] = await Promise.all([
     supabase.from('feed_stock').select('*').order('date', { ascending: false }),
-    supabase.from('feed_allocations').select('*').order('date', { ascending: false })
+    supabase.from('feed_allocations').select('*').order('date', { ascending: false }),
+    user ? supabase.from('profiles').select('full_name').eq('id', user.id).single() : Promise.resolve({ data: null })
   ]);
 
   const { data: feedStock, error: stockError } = stockResponse;
   const { data: feedAllocations, error: allocationError } = allocationResponse;
+  const userName = profileResponse.data?.full_name ?? user?.email ?? "Current User";
 
   if (stockError || allocationError) {
     const errorMessage = stockError?.message || allocationError?.message;
@@ -73,7 +78,7 @@ export default async function InventoryPage() {
             <TableBody>
               {feedStock && feedStock.map((item: any) => (
                 <TableRow key={item.id} className={item.quantity < lowStockThreshold ? 'bg-destructive/10 hover:bg-destructive/20' : ''}>
-                  <TableCell>{new Date(item.date + 'T00:00:00').toLocaleDateString()}</TableCell>
+                  <TableCell>{format(new Date(item.date + 'T00:00:00'), 'dd/MM/yyyy')}</TableCell>
                   <TableCell className="font-medium">{item.feed_type}</TableCell>
                   <TableCell>
                     {item.quantity < lowStockThreshold && <CircleAlert className="h-4 w-4 inline mr-1 text-destructive" />}
@@ -98,7 +103,7 @@ export default async function InventoryPage() {
         </CardContent>
       </Card>
       
-      <AddFeedAllocationForm />
+      <AddFeedAllocationForm userName={userName} />
 
       <Card>
         <CardHeader>
@@ -123,14 +128,14 @@ export default async function InventoryPage() {
             <TableBody>
               {feedAllocations && feedAllocations.map((item: any) => (
                 <TableRow key={item.id}>
-                  <TableCell>{new Date(item.date + 'T00:00:00').toLocaleDateString()}</TableCell>
+                  <TableCell>{format(new Date(item.date + 'T00:00:00'), 'dd/MM/yyyy')}</TableCell>
                   <TableCell>{item.shed}</TableCell>
                   <TableCell className="font-medium">{item.feed_type}</TableCell>
                   <TableCell>{item.quantity_allocated}</TableCell>
                   <TableCell>{item.unit}</TableCell>
                   <TableCell>{item.allocated_by}</TableCell>
                   <TableCell className="text-right space-x-1">
-                     <EditFeedAllocationButton record={item} />
+                     <EditFeedAllocationButton record={item} userName={userName} />
                     <DeleteFeedAllocationButton id={item.id} />
                   </TableCell>
                 </TableRow>
