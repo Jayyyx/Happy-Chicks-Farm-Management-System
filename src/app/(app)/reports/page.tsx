@@ -20,7 +20,7 @@ const reportHeaders: { [key: string]: string[] } = {
     eggCollection: ["Date", "Shed", "Total Eggs", "Broken Eggs"],
     feedUsage: ["Date", "Shed", "Feed Type", "Quantity Used"],
     brokenEggs: ["Date", "Shed", "Broken Eggs", "Percentage of Total"],
-    mortality: ["Date", "Shed", "Mortality Count", "Suspected Cause"]
+    deadBirds: ["Date", "Shed", "Dead Birds Count", "Suspected Cause"]
 };
 
 export default function ReportsPage() {
@@ -84,11 +84,11 @@ export default function ReportsPage() {
                 data = dbData.map(d => ({ date: d.date, shed: d.shed, feedtype: d.feed_type, quantityused: `${d.quantity_allocated} ${d.unit}` }));
                 break;
             }
-            case 'mortality': {
+            case 'deadBirds': {
                 const { data: dbData, error } = await supabase.from('mortality_records').select('*').gte('date', formattedStartDate).order('date', { ascending: false });
                 if (error) throw error;
-                headers = reportHeaders.mortality;
-                data = dbData.map(d => ({ date: d.date, shed: d.shed, mortalitycount: d.count, suspectedcause: d.cause || 'Unknown' }));
+                headers = reportHeaders.deadBirds;
+                data = dbData.map(d => ({ date: d.date, shed: d.shed, deadbirdscount: d.count, suspectedcause: d.cause || 'Unknown' }));
                 break;
             }
             case 'brokenEggs': {
@@ -188,7 +188,7 @@ export default function ReportsPage() {
                 </SelectGroup>
                  <SelectGroup>
                   <SelectLabel>Health</SelectLabel>
-                  <SelectItem value="mortality">Mortality</SelectItem>
+                  <SelectItem value="deadBirds">Dead Birds</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
