@@ -6,26 +6,39 @@ import {
   format, 
   eachDayOfInterval
 } from 'date-fns';
-import { DashboardClientContent } from './client'; // Import the new client component
+import { DashboardClientContent } from './client';
 
 async function getDashboardData() {
   const supabase = createClient();
   const today = startOfToday();
   const sevenDaysAgo = subDays(today, 6);
 
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // Fetch profile and tasks in parallel with other data
   const [
     eggCollectionData,
     mortalityData,
     feedAllocationData,
     feedStockData,
     farmConfigData,
+    profileResponse,
+    tasksResponse,
+    usersResponse,
   ] = await Promise.all([
     supabase.from('egg_collections').select('*').gte('date', format(sevenDaysAgo, 'yyyy-MM-dd')),
     supabase.from('mortality_records').select('*').gte('date', format(sevenDaysAgo, 'yyyy-MM-dd')),
     supabase.from('feed_allocations').select('*').order('date', { ascending: false }),
     supabase.from('feed_stock').select('*').order('date', { ascending: false }),
-    supabase.from('farm_config').select('*').eq('id', 1).single()
+    supabase.from('farm_config').select('*').eq('id', 1).single(),
+    user ? supabase.from('profiles').select('role').eq('id', user.id).single() : Promise.resolve({ data: null, error: null }),
+    user ? supabase.from('tasks').select('*, profiles (id, full_name)').eq('assigned_to_id', user.id).order('created_at', { ascending: false }) : Promise.resolve({ data: [], error: null }),
+    supabase.from('user_details').select('id, full_name'),
   ]);
+  
+  const userRole = profileResponse?.data?.role ?? 'Worker';
+  const tasks = tasksResponse.data ?? [];
+  const users = usersResponse.data ?? [];
 
   const farmConfig = farmConfigData.data;
   const BIRD_START_COUNT = farmConfig?.initial_bird_count ?? 0;
@@ -36,20 +49,25 @@ async function getDashboardData() {
     );
     // Return empty/default data to prevent crash
     return {
-      kpis: {
-        totalEggsToday: 'N/A',
-        feedConsumption: 'N/A',
-        mortalityRate: 'N/A',
-        activeBirds: 'N/A',
-        brokenEggs: 'N/A',
-        feedInventory: 'N/A',
-      },
-      charts: {
-        eggCollectionTrend: [],
-        feedConsumptionAnalysis: [],
-        mortalityRateTrend: []
-      },
-      activityLog: []
+      userRole,
+      tasks,
+      users,
+      dashboardData: {
+        kpis: {
+          totalEggsToday: 'N/A',
+          feedConsumption: 'N/A',
+          mortalityRate: 'N/A',
+          activeBirds: 'N/A',
+          brokenEggs: 'N/A',
+          feedInventory: 'N/A',
+        },
+        charts: {
+          eggCollectionTrend: [],
+          feedConsumptionAnalysis: [],
+          mortalityRateTrend: []
+        },
+        activityLog: []
+      }
     };
   }
 
@@ -125,33 +143,38 @@ async function getDashboardData() {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 3);
 
-
   return {
-    kpis: {
-      totalEggsToday: `${totalEggsToday} Eggs`,
-      feedConsumption: `${feedConsumptionToday} bag/day`,
-      mortalityRate: mortalityLast7Days,
-      activeBirds: activeBirds.toLocaleString(),
-      brokenEggs: `${brokenEggsToday}/day`,
-      feedInventory: `${feedInventory} Bags`,
-    },
-    charts: {
-      eggCollectionTrend: dailyEggData,
-      feedConsumptionAnalysis,
-      mortalityRateTrend: dailyMortalityData
-    },
-    activityLog: allActivities
+    userRole,
+    tasks,
+    users,
+    dashboardData: {
+      kpis: {
+        totalEggsToday: `${totalEggsToday} Eggs`,
+        feedConsumption: `${feedConsumptionToday} bag/day`,
+        mortalityRate: mortalityLast7Days,
+        activeBirds: activeBirds.toLocaleString(),
+        brokenEggs: `${brokenEggsToday}/day`,
+        feedInventory: `${feedInventory} Bags`,
+      },
+      charts: {
+        eggCollectionTrend: dailyEggData,
+        feedConsumptionAnalysis,
+        mortalityRateTrend: dailyMortalityData
+      },
+      activityLog: allActivities
+    }
   }
 }
 
 export default async function DashboardPage() {
-  const dashboardData = await getDashboardData();
+  const { userRole, dashboardData, tasks, users } = await getDashboardData();
   
   return (
     <DashboardClientContent 
-        kpis={dashboardData.kpis}
-        charts={dashboardData.charts}
-        activityLog={dashboardData.activityLog}
+        userRole={userRole}
+        dashboardData={dashboardData}
+        tasks={tasks}
+        users={users}
     />
   );
 }
