@@ -10,7 +10,6 @@ const formSchema = z.object({
   shed: z.string().min(1, 'Shed is required'),
   total_eggs: z.coerce.number().int().min(0, 'Total eggs cannot be negative'),
   broken_eggs: z.coerce.number().int().min(0, 'Broken eggs cannot be negative'),
-  collected_by: z.string().min(1, 'Collected by is required'),
 });
 
 const updateFormSchema = formSchema.extend({
@@ -29,6 +28,20 @@ export type FormState = {
   };
   success?: boolean;
 };
+
+async function getCurrentUserFullName() {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return 'System';
+
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', user.id)
+        .single();
+    
+    return profile?.full_name ?? user.email ?? 'System';
+}
 
 export async function addEggCollection(prevState: FormState | undefined, formData: FormData): Promise<FormState> {
   const supabase = createClient();
@@ -49,7 +62,6 @@ export async function addEggCollection(prevState: FormState | undefined, formDat
     shed: formData.get('shed'),
     total_eggs: formData.get('totalEggs'),
     broken_eggs: formData.get('brokenEggs'),
-    collected_by: formData.get('collectedBy'),
   });
 
   if (!validatedFields.success) {
@@ -60,7 +72,8 @@ export async function addEggCollection(prevState: FormState | undefined, formDat
     };
   }
   
-  const { date, shed, total_eggs, broken_eggs, collected_by } = validatedFields.data;
+  const { date, shed, total_eggs, broken_eggs } = validatedFields.data;
+  const collected_by = await getCurrentUserFullName();
 
   const { error } = await supabase.from('egg_collections').insert({
     date,
@@ -96,7 +109,6 @@ export async function updateEggCollection(prevState: FormState | undefined, form
     shed: formData.get('shed'),
     total_eggs: formData.get('totalEggs'),
     broken_eggs: formData.get('brokenEggs'),
-    collected_by: formData.get('collectedBy'),
   });
 
   if (!validatedFields.success) {
@@ -107,7 +119,8 @@ export async function updateEggCollection(prevState: FormState | undefined, form
     };
   }
   
-  const { id, date, shed, total_eggs, broken_eggs, collected_by } = validatedFields.data;
+  const { id, date, shed, total_eggs, broken_eggs } = validatedFields.data;
+  const collected_by = await getCurrentUserFullName();
 
   const { error } = await supabase
     .from('egg_collections')
