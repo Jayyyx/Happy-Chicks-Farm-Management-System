@@ -27,7 +27,6 @@ const addFeedAllocationSchema = z.object({
   feedType: z.string().min(1, 'Feed type is required'),
   quantityAllocated: z.coerce.number().int().min(1, 'Quantity must be at least 1'),
   unit: z.string().min(1, 'Unit is required'),
-  allocatedBy: z.string().min(1, 'Allocated by is required'),
 });
 
 // Schema for updating feed allocation
@@ -41,6 +40,21 @@ export type FormState = {
   errors?: Record<string, string[] | undefined>;
   success?: boolean;
 };
+
+async function getCurrentUserFullName() {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return 'System';
+
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', user.id)
+        .single();
+    
+    return profile?.full_name ?? user.email ?? 'System';
+}
+
 
 // Action to add a new feed stock item
 export async function addFeedStock(prevState: FormState | undefined, formData: FormData): Promise<FormState> {
@@ -131,7 +145,8 @@ export async function addFeedAllocation(prevState: FormState | undefined, formDa
         };
     }
 
-    const { date, shed, feedType, quantityAllocated, unit, allocatedBy } = validatedFields.data;
+    const { date, shed, feedType, quantityAllocated, unit } = validatedFields.data;
+    const allocated_by = await getCurrentUserFullName();
 
     const { error } = await supabase.from('feed_allocations').insert({
         date,
@@ -139,7 +154,7 @@ export async function addFeedAllocation(prevState: FormState | undefined, formDa
         feed_type: feedType,
         quantity_allocated: quantityAllocated,
         unit,
-        allocated_by: allocatedBy,
+        allocated_by,
         user_id: user.id,
     });
 
@@ -165,7 +180,8 @@ export async function updateFeedAllocation(prevState: FormState | undefined, for
         };
     }
 
-    const { id, date, shed, feedType, quantityAllocated, unit, allocatedBy } = validatedFields.data;
+    const { id, date, shed, feedType, quantityAllocated, unit } = validatedFields.data;
+    const allocated_by = await getCurrentUserFullName();
 
     const { error } = await supabase
         .from('feed_allocations')
@@ -175,7 +191,7 @@ export async function updateFeedAllocation(prevState: FormState | undefined, for
             feed_type: feedType,
             quantity_allocated: quantityAllocated,
             unit,
-            allocated_by: allocatedBy,
+            allocated_by,
         })
         .match({ id });
 
