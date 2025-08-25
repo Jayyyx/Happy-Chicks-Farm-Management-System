@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, User } from "lucide-react";
 import { addFeedAllocation, type FormState } from './actions';
 import { useToast } from "@/hooks/use-toast";
 
@@ -22,7 +22,7 @@ function SubmitButton() {
   );
 }
 
-export function AddFeedAllocationForm() {
+export function AddFeedAllocationForm({ userName }: { userName: string }) {
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
   const initialState: FormState = { message: "", success: undefined };
@@ -93,9 +93,11 @@ export function AddFeedAllocationForm() {
                      {state.errors?.unit && <p className="text-sm font-medium text-destructive">{state.errors.unit[0]}</p>}
                 </div>
                 <div className="space-y-1.5">
-                    <Label htmlFor="allocatedBy">Allocated By</Label>
-                    <Input id="allocatedBy" name="allocatedBy" placeholder="e.g., John Doe" />
-                    {state.errors?.allocatedBy && <p className="text-sm font-medium text-destructive">{state.errors.allocatedBy[0]}</p>}
+                    <Label>Allocated By</Label>
+                    <div className="flex h-10 w-full items-center rounded-md border border-input bg-muted/50 px-3 py-2 text-sm">
+                        <User className="mr-2 h-4 w-4 text-muted-foreground" />
+                        <span>{userName}</span>
+                    </div>
                 </div>
             </CardContent>
             <CardFooter className="flex justify-end">
