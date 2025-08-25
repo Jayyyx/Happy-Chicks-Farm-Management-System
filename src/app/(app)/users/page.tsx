@@ -4,7 +4,7 @@ import { Users } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/server";
-import { formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { AddUserButton } from "./add-user-button";
 import { EditUserButton } from "./edit-user-button";
 import { DeleteUserButton } from "./delete-user-button";
@@ -87,7 +87,7 @@ export default async function UserManagementPage() {
                       {user.status || 'Invited'}
                     </Badge>
                   </TableCell>
-                  <TableCell>{user.last_sign_in_at ? `${formatDistanceToNow(new Date(user.last_sign_in_at))} ago` : 'Never'}</TableCell>
+                  <TableCell>{user.last_sign_in_at ? format(new Date(user.last_sign_in_at), 'dd/MM/yyyy') : 'Never'}</TableCell>
                   <TableCell className="text-right space-x-1">
                     {isManager && currentUser?.id !== user.id ? (
                         <>
