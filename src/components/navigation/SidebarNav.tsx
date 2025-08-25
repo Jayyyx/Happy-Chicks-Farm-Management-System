@@ -14,7 +14,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/inventory", label: "Inventory", icon: FeedIcon },
   { href: "/egg-collection", label: "Egg Collection", icon: EggIcon },
-  { href: "/mortality", label: "Mortality Record", icon: BirdIcon },
+  { href: "/dead-birds", label: "Dead Birds Record", icon: BirdIcon },
   { href: "/tasks", label: "Task Management", icon: ListChecks },
   { href: "/sales", label: "Sales Tracking", icon: ShoppingCart },
   { href: "/reports", label: "Reports", icon: FileText },
