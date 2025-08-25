@@ -78,18 +78,7 @@ export function AddTaskForm({ users, isManager }: AddTaskFormProps) {
             <Label htmlFor="due_date">Due Date (Optional)</Label>
             <Input id="due_date" name="due_date" type="date" />
           </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="status">Status</Label>
-            <Select name="status" defaultValue="Pending">
-              <SelectTrigger id="status"><SelectValue placeholder="Select status" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Pending">Pending</SelectItem>
-                <SelectItem value="In Progress">In Progress</SelectItem>
-                <SelectItem value="Completed">Completed</SelectItem>
-                <SelectItem value="Blocked">Blocked</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          
           <div className="space-y-1.5 md:col-span-2">
             <Label htmlFor="notes">Notes (Optional)</Label>
             <Textarea id="notes" name="notes" placeholder="Any additional details or comments" />
