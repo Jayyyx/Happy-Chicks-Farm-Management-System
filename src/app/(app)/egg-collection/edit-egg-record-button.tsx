@@ -6,7 +6,7 @@ import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Edit, Loader2 } from "lucide-react";
+import { Edit, Loader2, User } from "lucide-react";
 import { updateEggCollection, type FormState } from './actions';
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
@@ -39,7 +39,7 @@ function SubmitButton() {
   );
 }
 
-export function EditEggRecordButton({ record }: { record: EggCollectionRecord }) {
+export function EditEggRecordButton({ record, userName }: { record: EggCollectionRecord, userName: string }) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const initialState: FormState = { message: "", success: undefined };
@@ -104,9 +104,11 @@ export function EditEggRecordButton({ record }: { record: EggCollectionRecord })
                         {state.errors?.broken_eggs && <p className="text-sm font-medium text-destructive">{state.errors.broken_eggs[0]}</p>}
                     </div>
                     <div className="space-y-1.5 md:col-span-2">
-                        <Label htmlFor="collectedBy-edit">Collected By</Label>
-                        <Input id="collectedBy-edit" name="collectedBy" placeholder="e.g., John Doe" defaultValue={record.collected_by} />
-                        {state.errors?.collected_by && <p className="text-sm font-medium text-destructive">{state.errors.collected_by[0]}</p>}
+                        <Label>Collected By</Label>
+                         <div className="flex h-10 w-full items-center rounded-md border border-input bg-muted/50 px-3 py-2 text-sm">
+                           <User className="mr-2 h-4 w-4 text-muted-foreground" />
+                           <span>{userName} (Current User)</span>
+                         </div>
                     </div>
                 </div>
                 <DialogFooter>
