@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EggIcon } from "@/components/icons/EggIcon";
-import { PlusCircle, Loader2 } from "lucide-react";
+import { PlusCircle, Loader2, User } from "lucide-react";
 import { addEggCollection, type FormState } from './actions';
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -31,7 +31,7 @@ function SubmitButton() {
   );
 }
 
-export function AddEggRecordForm() {
+export function AddEggRecordForm({ userName }: { userName: string }) {
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
   const initialState: FormState = { message: "", success: undefined };
@@ -62,7 +62,7 @@ export function AddEggRecordForm() {
           </CardTitle>
           <CardDescription>Log daily egg collection data for each shed.</CardDescription>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="space-y-1.5">
             <Label htmlFor="collectionDate">Date</Label>
             <Input id="collectionDate" name="collectionDate" type="date" defaultValue={today} />
@@ -92,10 +92,12 @@ export function AddEggRecordForm() {
             <Input id="brokenEggs" name="brokenEggs" type="number" placeholder="e.g., 5" />
             {state.errors?.broken_eggs && <p className="text-sm font-medium text-destructive">{state.errors.broken_eggs[0]}</p>}
           </div>
-          <div className="space-y-1.5 md:col-span-2 lg:col-span-4">
-            <Label htmlFor="collectedBy">Collected By</Label>
-            <Input id="collectedBy" name="collectedBy" placeholder="e.g., John Doe" />
-            {state.errors?.collected_by && <p className="text-sm font-medium text-destructive">{state.errors.collected_by[0]}</p>}
+           <div className="space-y-1.5 md:col-span-2 lg:col-span-3">
+            <Label>Collected By</Label>
+            <div className="flex h-10 w-full items-center rounded-md border border-input bg-muted/50 px-3 py-2 text-sm">
+              <User className="mr-2 h-4 w-4 text-muted-foreground" />
+              <span>{userName}</span>
+            </div>
           </div>
         </CardContent>
         <CardFooter className="flex justify-end">
