@@ -2,11 +2,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { ListChecks } from "lucide-react";
 import { AddTaskForm } from "./add-task-form";
 import { EditTaskButton } from "./edit-task-button";
 import { DeleteTaskButton } from "./delete-task-button";
+import { format } from "date-fns";
 
 export default async function TasksPage() {
   const supabase = createClient();
@@ -57,20 +57,9 @@ export default async function TasksPage() {
 
   const isManager = profile?.role === 'Manager';
 
-  const getStatusBadgeVariant = (status: string) => {
-    switch (status) {
-      case 'Completed': return { variant: 'default', className: 'bg-green-600 text-white' };
-      case 'In Progress': return { variant: 'outline', className: 'border-blue-500 text-blue-600' };
-      case 'Blocked': return { variant: 'destructive', className: '' };
-      case 'Pending':
-      default:
-        return { variant: 'secondary', className: '' };
-    }
-  };
-
   return (
     <div className="space-y-6">
-      <AddTaskForm users={users ?? []} isManager={isManager} />
+      {isManager && <AddTaskForm users={users ?? []} isManager={isManager} />}
 
       <Card>
         <CardHeader>
@@ -86,37 +75,36 @@ export default async function TasksPage() {
                 <TableHead>Description</TableHead>
                 <TableHead>Assigned To</TableHead>
                 <TableHead>Due Date</TableHead>
-                <TableHead>Status</TableHead>
                 <TableHead>Created</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {tasks && tasks.map((task) => {
-                const badgeStyle = getStatusBadgeVariant(task.status);
                 return (
                   <TableRow key={task.id}>
                     <TableCell className="font-medium max-w-xs truncate" title={task.description ?? ''}>
                       {task.description || 'N/A'}
                     </TableCell>
                     <TableCell>{task.profiles?.full_name || 'Unassigned'}</TableCell>
-                    <TableCell>{task.due_date ? new Date(task.due_date + 'T00:00:00').toLocaleDateString() : 'N/A'}</TableCell>
-                    <TableCell>
-                      <Badge variant={badgeStyle.variant as any} className={badgeStyle.className}>
-                        {task.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{new Date(task.created_at).toLocaleDateString()}</TableCell>
+                    <TableCell>{task.due_date ? format(new Date(task.due_date + 'T00:00:00'), 'dd/MM/yyyy') : 'N/A'}</TableCell>
+                    <TableCell>{format(new Date(task.created_at), 'dd/MM/yyyy')}</TableCell>
                     <TableCell className="text-right space-x-1">
-                      <EditTaskButton task={task as any} users={users ?? []} isManager={isManager} />
-                      <DeleteTaskButton taskId={task.id} />
+                      {isManager ? (
+                        <>
+                          <EditTaskButton task={task as any} users={users ?? []} isManager={isManager} />
+                          <DeleteTaskButton taskId={task.id} />
+                        </>
+                      ) : (
+                         <span className="text-xs text-muted-foreground">No actions</span>
+                      )}
                     </TableCell>
                   </TableRow>
                 )
               })}
               {(!tasks || tasks.length === 0) && (
                  <TableRow>
-                    <TableCell colSpan={6} className="text-center text-muted-foreground">No tasks found. Create one above!</TableCell>
+                    <TableCell colSpan={5} className="text-center text-muted-foreground">No tasks found. Create one above!</TableCell>
                  </TableRow>
               )}
             </TableBody>
