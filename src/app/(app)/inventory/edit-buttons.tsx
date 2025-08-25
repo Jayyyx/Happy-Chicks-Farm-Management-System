@@ -6,7 +6,7 @@ import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Edit, Loader2 } from "lucide-react";
+import { Edit, Loader2, User } from "lucide-react";
 import { updateFeedStock, updateFeedAllocation, type FormState } from './actions';
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
@@ -131,7 +131,7 @@ export function EditFeedStockButton({ record }: { record: FeedStockRecord }) {
   );
 }
 
-export function EditFeedAllocationButton({ record }: { record: FeedAllocationRecord }) {
+export function EditFeedAllocationButton({ record, userName }: { record: FeedAllocationRecord, userName: string }) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const initialState: FormState = { message: "", success: undefined };
@@ -207,9 +207,11 @@ export function EditFeedAllocationButton({ record }: { record: FeedAllocationRec
                         {state.errors?.unit && <p className="text-sm font-medium text-destructive">{state.errors.unit[0]}</p>}
                     </div>
                     <div className="space-y-1.5">
-                        <Label htmlFor="allocatedBy-edit">Allocated By</Label>
-                        <Input id="allocatedBy-edit" name="allocatedBy" defaultValue={record.allocated_by} />
-                        {state.errors?.allocatedBy && <p className="text-sm font-medium text-destructive">{state.errors.allocatedBy[0]}</p>}
+                        <Label>Allocated By</Label>
+                        <div className="flex h-10 w-full items-center rounded-md border border-input bg-muted/50 px-3 py-2 text-sm">
+                           <User className="mr-2 h-4 w-4 text-muted-foreground" />
+                           <span>{userName} (Current User)</span>
+                        </div>
                     </div>
                 </div>
                 <DialogFooter>
