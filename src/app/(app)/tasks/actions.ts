@@ -9,7 +9,6 @@ const taskSchema = z.object({
   description: z.string().min(1, 'Description is required.'),
   assigned_to_id: z.string().uuid('Invalid user.').nullable().optional(),
   due_date: z.string().nullable().optional(),
-  status: z.enum(['Pending', 'In Progress', 'Completed', 'Blocked']),
   notes: z.string().nullable().optional(),
 });
 
@@ -35,7 +34,6 @@ export async function addTask(prevState: TaskFormState, formData: FormData): Pro
     description: formData.get('description'),
     assigned_to_id: formData.get('assigned_to_id') === 'unassigned' ? null : formData.get('assigned_to_id'),
     due_date: formData.get('due_date') || null,
-    status: formData.get('status'),
     notes: formData.get('notes') || null,
   });
 
@@ -49,6 +47,7 @@ export async function addTask(prevState: TaskFormState, formData: FormData): Pro
 
   const { error } = await supabase.from('tasks').insert({
     ...validatedFields.data,
+    status: 'Pending', // Default status
     user_id: user.id,
   });
 
@@ -75,7 +74,6 @@ export async function updateTask(prevState: TaskFormState, formData: FormData): 
     description: formData.get('description'),
     assigned_to_id: formData.get('assigned_to_id') === 'unassigned' ? null : formData.get('assigned_to_id'),
     due_date: formData.get('due_date') || null,
-    status: formData.get('status'),
     notes: formData.get('notes') || null,
   });
 
