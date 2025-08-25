@@ -2,17 +2,23 @@
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Edit3, CircleDollarSign } from "lucide-react";
+import { CircleDollarSign } from "lucide-react";
 import { AddSaleForm } from "./add-sale-form";
+import { EditSaleButton } from "./edit-sale-button";
 import { DeleteSaleButton } from "./delete-button";
+import { format } from "date-fns";
 
 export default async function SalesPage() {
   const supabase = createClient();
-  const { data: sales, error } = await supabase
-    .from('sales')
-    .select('*')
-    .order('date', { ascending: false });
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const [salesResponse, profileResponse] = await Promise.all([
+    supabase.from('sales').select('*').order('date', { ascending: false }),
+    user ? supabase.from('profiles').select('full_name').eq('id', user.id).single() : Promise.resolve({ data: null })
+  ]);
+  
+  const { data: sales, error } = salesResponse;
+  const userName = profileResponse.data?.full_name ?? user?.email ?? "Current User";
 
   if (error) {
     console.error("Supabase fetch error:", error.message);
@@ -20,7 +26,7 @@ export default async function SalesPage() {
 
   return (
     <div className="space-y-6">
-      <AddSaleForm />
+      <AddSaleForm userName={userName} />
 
       <Card>
         <CardHeader>
@@ -45,7 +51,7 @@ export default async function SalesPage() {
             <TableBody>
               {sales && sales.map((sale: any) => (
                 <TableRow key={sale.id}>
-                  <TableCell>{new Date(sale.date + 'T00:00:00').toLocaleDateString()}</TableCell>
+                  <TableCell>{format(new Date(sale.date + 'T00:00:00'), 'dd/MM/yyyy')}</TableCell>
                   <TableCell className="font-medium">{sale.item_sold}</TableCell>
                   <TableCell>{sale.quantity}</TableCell>
                   <TableCell>{sale.unit}</TableCell>
@@ -54,7 +60,7 @@ export default async function SalesPage() {
                   <TableCell>{sale.customer_name || 'N/A'}</TableCell>
                   <TableCell>{sale.recorded_by}</TableCell>
                   <TableCell className="text-right space-x-1">
-                    <Button variant="ghost" size="icon" className="hover:text-accent" disabled><Edit3 className="h-4 w-4" /></Button>
+                    <EditSaleButton record={sale} userName={userName} />
                     <DeleteSaleButton id={sale.id} />
                   </TableCell>
                 </TableRow>
