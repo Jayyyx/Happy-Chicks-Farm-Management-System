@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ShoppingCart, PlusCircle, Loader2 } from "lucide-react";
+import { ShoppingCart, PlusCircle, Loader2, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { addSale, type FormState } from './actions';
 
@@ -44,7 +44,7 @@ const unitMap: { [key: string]: string } = {
     "Other": ""
 };
 
-export function AddSaleForm() {
+export function AddSaleForm({ userName }: { userName: string }) {
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
   const initialState: FormState = { message: "", success: undefined };
@@ -148,9 +148,11 @@ export function AddSaleForm() {
             <Input id="customer_name" name="customer_name" placeholder="e.g., Local Market" />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="recorded_by">Recorded By</Label>
-            <Input id="recorded_by" name="recorded_by" placeholder="Your Name" />
-            {state.errors?.recorded_by && <p className="text-sm font-medium text-destructive">{state.errors.recorded_by[0]}</p>}
+            <Label>Recorded By</Label>
+             <div className="flex h-10 w-full items-center rounded-md border border-input bg-muted/50 px-3 py-2 text-sm">
+               <User className="mr-2 h-4 w-4 text-muted-foreground" />
+               <span>{userName}</span>
+             </div>
           </div>
         </CardContent>
         <CardFooter className="flex justify-end">
