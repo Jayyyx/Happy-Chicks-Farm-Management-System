@@ -1,4 +1,3 @@
-
 "use client";
 
 import { ManagerDashboard } from "@/app/(app)/dashboard/manager-dashboard";
