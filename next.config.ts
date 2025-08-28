@@ -1,9 +1,8 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
   experimental: {
-    serverActions: true,
+    serverActions: {}, // ✅ must be an object, not boolean
   },
   typescript: {
     ignoreBuildErrors: true,
