@@ -4,21 +4,21 @@ import { Users } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/server";
-import { format, formatDistanceToNow } from 'date-fns';
 import { AddUserButton } from "./add-user-button";
 import { EditUserButton } from "./edit-user-button";
 import { DeleteUserButton } from "./delete-user-button";
+import { format } from "date-fns";
 
 export default async function UserManagementPage() {
   const supabase = createClient();
   
   const { data: { user: currentUser } } = await supabase.auth.getUser();
 
-  // Use the new user_details view which joins auth.users and profiles
+  // Fetch from the 'profiles' table directly, which is accessible via RLS policies.
   const { data: users, error } = await supabase
-    .from('user_details')
+    .from('profiles')
     .select('*')
-    .order('email');
+    .order('full_name');
     
   // The current user's role is still needed from the profiles table
   const { data: profile } = currentUser 
@@ -45,14 +45,16 @@ export default async function UserManagementPage() {
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
             <CardTitle className="font-headline flex items-center gap-2">
               <Users className="h-6 w-6 text-primary" /> User Management
             </CardTitle>
             <CardDescription>Manage users, roles, and permissions within Happy Chicks.</CardDescription>
           </div>
-          {isManager && <AddUserButton />}
+          <div className="mt-4 sm:mt-0">
+             {isManager && <AddUserButton />}
+          </div>
         </CardHeader>
       </Card>
 
@@ -65,10 +67,11 @@ export default async function UserManagementPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
+                <TableHead className="hidden sm:table-cell">Email</TableHead>
                 <TableHead>Role</TableHead>
+                <TableHead>Assigned Shed</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Last Login</TableHead>
+                <TableHead className="hidden md:table-cell">Last Login</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -76,18 +79,21 @@ export default async function UserManagementPage() {
               {users && users.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell className="font-medium">{user.full_name || 'N/A'}</TableCell>
-                  <TableCell>{user.email}</TableCell>
+                  <TableCell className="hidden sm:table-cell">{user.email || 'Invited'}</TableCell>
                   <TableCell>
                      <Badge variant={user.role === 'Manager' ? 'default' : 'secondary'}>
                         {user.role}
                      </Badge>
                   </TableCell>
+                  <TableCell>{user.assigned_shed || 'N/A'}</TableCell>
                   <TableCell>
                     <Badge variant={user.status === 'Active' ? 'outline' : 'destructive'} className={user.status === 'Active' ? 'border-green-500 text-green-600' : ''}>
                       {user.status || 'Invited'}
                     </Badge>
                   </TableCell>
-                  <TableCell>{user.last_sign_in_at ? format(new Date(user.last_sign_in_at), 'dd/MM/yyyy') : 'Never'}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {user.last_sign_in_at ? format(new Date(user.last_sign_in_at), "dd/MM/yyyy HH:mm") : 'Never'}
+                  </TableCell>
                   <TableCell className="text-right space-x-1">
                     {isManager && currentUser?.id !== user.id ? (
                         <>
@@ -102,7 +108,7 @@ export default async function UserManagementPage() {
               ))}
               {(!users || users.length === 0) && (
                  <TableRow>
-                    <TableCell colSpan={6} className="text-center text-muted-foreground">No users found.</TableCell>
+                    <TableCell colSpan={7} className="text-center text-muted-foreground">No users found.</TableCell>
                  </TableRow>
               )}
             </TableBody>
